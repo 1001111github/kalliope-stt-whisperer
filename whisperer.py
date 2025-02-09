@@ -21,15 +21,15 @@ class Whisperer(SpeechRecognition):
         # give the audio file path to process directly to the mother class if exist
         SpeechRecognition.__init__(self, kwargs.get('audio_file_path', None))
 
-        # callback function to call after the translation speech/tex
-        self.main_controller_callback = callback
         self.language = kwargs.get('language', "English")
         self.model = kwargs.get('model', "base")
 
-        # start listening in the background
-        logger.debug("[Whisperer] starting whisper with %s model" %  self.model + " " + self.language)
+        # callback function to call after the translation speech/tex
+        self.main_controller_callback = callback
         self.set_callback(self.whisper_callback)
+
         # start processing, record a sample from the microphone if no audio file path provided, else read the file
+        logger.debug("[Whisperer] starting whisper with %s model" %  self.model + " " + self.language)
         self.start_processing()
 
     def whisper_callback(self, recognizer, audio):
@@ -41,9 +41,9 @@ class Whisperer(SpeechRecognition):
             captured_audio = recognizer.recognize_whisper(audio,
                                                          language=self.language,
                                                          model=self.model,
-                                                         suppress_tokens='0,11,13,30, 3529,7323')
+                                                         suppress_tokens='0,11,13,30,1811,3529,7323')
             Utils.print_success("Whisper Speech Recognition thinks you said %s" % captured_audio)
-            self._analyse_audio(captured_audio.lower())
+            self._analyse_audio(captured_audio)
 
         except sr.UnknownValueError:
             Utils.print_warning("Whisper Speech Recognition could not understand audio")
@@ -62,5 +62,10 @@ class Whisperer(SpeechRecognition):
         Confirm the audio exists and run it in a Callback
         :param audio_to_text: the captured audio
         """
+        logger.debug("[Whisperer] audio_to_text: %s" % audio_to_text)
+        if "BLANKAUDIO" in audio_to_text:
+            audio_to_text = ""
+            print(audio_to_text)
+		
         if self.main_controller_callback is not None:
             self.main_controller_callback(audio_to_text)
