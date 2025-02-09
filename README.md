@@ -1,9 +1,9 @@
 # Whisperer STT
-Whisper STT Module for Kalliope Refer to [here](https://github.com/openai/whisper) for details.
+Whisper STT Module for Kalliope Refer to [openai/whisper](https://github.com/openai/whisper) for details.
 
 ## Installation
 ```bash
-kalliope install --git-url https://github.com/github10011111/kalliope_stt_whisperer.git
+kalliope install --git-url https://github.com/1001111github/kalliope_stt_whisperer.git
 ```
 
 ## Parameters
